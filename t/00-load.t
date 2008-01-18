@@ -1,6 +1,9 @@
-#!/usr/bin/env perl
+#!perl -T
 
-use strict;
-use warnings;
 use Test::More tests => 1;
-use ok 'Catalyst::Component::ACCEPT_CONTEXT';
+
+BEGIN {
+	use_ok( 'Catalyst::Component::ACCEPT_CONTEXT' );
+}
+
+diag( "Testing Catalyst::Component::ACCEPT_CONTEXT $Catalyst::Component::ACCEPT_CONTEXT::VERSION, Perl $], $^X" );
