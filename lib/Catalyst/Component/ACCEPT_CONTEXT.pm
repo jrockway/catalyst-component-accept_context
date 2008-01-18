@@ -37,6 +37,57 @@ your model:
         print "The current URL is ". $self->context->req->uri->as_string;
     }
 
+=head1 WARNING WARNING WARNING
+
+Using this module is somewhat of a hack.  Changing the state of your
+objects on every request is a pretty braindead way of doing OO.  If
+you want your application to be brain-live, then you should use
+L<Catalyst::Component::InstancePerContext|Catalyst::Component::InstancePerContext>.  
+
+Instead of doing this on every request (which is basically
+what this module does):
+
+    $my_component->context($c);
+
+It's better to do something like this:
+    
+    package FooApp::Controller::Root;
+    use base 'Catalyst::Controller';
+    use Moose;
+    
+    with 'Catalyst::Component::InstancePerContext';
+    has 'context' => (is => 'ro');
+    
+    sub build_per_context_instance {
+        my ($self, $c, @args) = @_;
+        return $self->new({ context => $c, %$self, @args });
+    }
+    
+    sub actions :Whatever {
+        my $self = shift;
+        my $c = $self->context; # this works now
+    }
+        
+    1;
+
+Now you get a brand new object that lasts for a single request instead
+of changing the state of an existing one on each request.  This is
+much cleaner OO design.
+
+The best strategy, though, is not to use the context inside your
+model.  It's best for your Controller to pull the necessary data from
+the context, and pass it as arguments:
+
+   sub action :Local {
+       my ($self, $c) = @_;
+       my $foo  = $c->model('Foo');
+       my $quux = $foo->frobnicate(baz => $c->request->params->{baz});
+       $c->stash->{quux} = $quux;
+   }
+
+This will make it Really Easy to test your components outside of
+Catalyst, which is always good.
+
 =head1 METHODS
 
 =head2 context
