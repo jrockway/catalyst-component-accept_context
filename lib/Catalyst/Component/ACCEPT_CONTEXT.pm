@@ -2,7 +2,7 @@ package Catalyst::Component::ACCEPT_CONTEXT;
 
 use warnings;
 use strict;
-use NEXT;
+use MRO::Compat;
 use Scalar::Util qw(weaken);
 
 =head1 NAME
@@ -120,8 +120,8 @@ sub ACCEPT_CONTEXT {
 
     $self->{context} = $context;
     weaken($self->{context});
-    
-    return $self->NEXT::ACCEPT_CONTEXT($context, @_) || $self;
+
+    return $self->next::method($context, @_) || $self;
 }
 
 =head2 COMPONENT
@@ -136,7 +136,7 @@ sub COMPONENT {
     my $args  = shift;
     $args->{context} = $app;
     weaken($args->{context}) if ref $args->{context};
-    return $class->NEXT::COMPONENT($app, $args, @_);
+    return $class->next::method($app, $args, @_);
 }
 
 =head1 AUTHOR
