@@ -121,7 +121,7 @@ sub ACCEPT_CONTEXT {
     $self->{context} = $context;
     weaken($self->{context});
 
-    return $self->next::method($context, @_) || $self;
+    return $self->maybe::next::method($context, @_) || $self;
 }
 
 =head2 COMPONENT
@@ -136,7 +136,7 @@ sub COMPONENT {
     my $args  = shift;
     $args->{context} = $app;
     weaken($args->{context}) if ref $args->{context};
-    return $class->next::method($app, $args, @_);
+    return $class->maybe::next::method($app, $args, @_);
 }
 
 =head1 AUTHOR
