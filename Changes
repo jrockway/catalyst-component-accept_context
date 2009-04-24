@@ -1,5 +1,6 @@
 Revision history for Catalyst-Component-ACCEPT_CONTEXT
 
+0.06    24 April 2009
         Switch from NEXT to MRO::Compat
 
 0.05    18 Jan 2008

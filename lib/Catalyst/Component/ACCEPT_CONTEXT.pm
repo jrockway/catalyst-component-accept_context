@@ -12,11 +12,11 @@ request context available in Models and Views.
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
@@ -42,7 +42,7 @@ your model:
 Using this module is somewhat of a hack.  Changing the state of your
 objects on every request is a pretty braindead way of doing OO.  If
 you want your application to be brain-live, then you should use
-L<Catalyst::Component::InstancePerContext|Catalyst::Component::InstancePerContext>.  
+L<Catalyst::Component::InstancePerContext|Catalyst::Component::InstancePerContext>.
 
 Instead of doing this on every request (which is basically
 what this module does):
@@ -50,24 +50,24 @@ what this module does):
     $my_component->context($c);
 
 It's better to do something like this:
-    
+
     package FooApp::Controller::Root;
     use base 'Catalyst::Controller';
     use Moose;
-    
+
     with 'Catalyst::Component::InstancePerContext';
     has 'context' => (is => 'ro');
-    
+
     sub build_per_context_instance {
         my ($self, $c, @args) = @_;
         return $self->new({ context => $c, %$self, @args });
     }
-    
+
     sub actions :Whatever {
         my $self = shift;
         my $c = $self->context; # this works now
     }
-        
+
     1;
 
 Now you get a brand new object that lasts for a single request instead
