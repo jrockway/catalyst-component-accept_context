@@ -21,7 +21,7 @@ is $foo->context->{ctx}, 'it is', 'got ctx';
 
     sub new {
         my $class = shift;
-        return $class->NEXT::new(@_);
+        return $class->next::method(@_);
     }
 
 }
